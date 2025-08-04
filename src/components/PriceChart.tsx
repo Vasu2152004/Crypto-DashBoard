@@ -1,137 +1,82 @@
-import { useEffect, useRef, useState } from 'react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { MarketChartData } from '@/types';
-import { chartTimeRanges } from '@/lib/utils';
+'use client';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
+import { MarketChartData } from '@/types';
+import { formatCurrency } from '@/lib/utils';
 
 interface PriceChartProps {
   data: MarketChartData;
-  coinName: string;
-  currentPrice: number;
-  priceChange24h: number;
+  timeRange: number;
   onTimeRangeChange: (days: number) => void;
-  selectedTimeRange: number;
 }
 
-export function PriceChart({
-  data,
-  coinName,
-  currentPrice,
-  priceChange24h,
-  onTimeRangeChange,
-  selectedTimeRange,
-}: PriceChartProps) {
-  const chartRef = useRef<ChartJS>(null);
+export function PriceChart({ data, timeRange, onTimeRangeChange }: PriceChartProps) {
+  const timeRanges = [
+    { label: '24H', value: 1 },
+    { label: '7D', value: 7 },
+    { label: '30D', value: 30 },
+    { label: '90D', value: 90 },
+  ];
 
-  const chartData = {
-    labels: data.prices.map((price) => {
-      const date = new Date(price[0]);
-      return date.toLocaleDateString();
-    }),
-    datasets: [
-      {
-        label: `${coinName} Price`,
-        data: data.prices.map((price) => price[1]),
-        borderColor: priceChange24h >= 0 ? '#10b981' : '#ef4444',
-        backgroundColor: priceChange24h >= 0 
-          ? 'rgba(16, 185, 129, 0.1)' 
-          : 'rgba(239, 68, 68, 0.1)',
-        fill: true,
-        tension: 0.4,
-        pointRadius: 0,
-        pointHoverRadius: 6,
-        pointHoverBackgroundColor: priceChange24h >= 0 ? '#10b981' : '#ef4444',
-        pointHoverBorderColor: '#ffffff',
-        pointHoverBorderWidth: 2,
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        mode: 'index' as const,
-        intersect: false,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: '#ffffff',
-        bodyColor: '#ffffff',
-        borderColor: priceChange24h >= 0 ? '#10b981' : '#ef4444',
-        borderWidth: 1,
-        callbacks: {
-          label: function(context: any) {
-            return `$${context.parsed.y.toLocaleString()}`;
-          },
-        },
-      },
-    },
-    scales: {
-      x: {
-        display: false,
-        grid: {
-          display: false,
-        },
-      },
-      y: {
-        display: false,
-        grid: {
-          display: false,
-        },
-      },
-    },
-    interaction: {
-      mode: 'index' as const,
-      intersect: false,
-    },
-  };
+  // Get the latest price for display
+  const latestPrice = data.prices[data.prices.length - 1]?.[1] || 0;
+  const firstPrice = data.prices[0]?.[1] || 0;
+  const priceChange = latestPrice - firstPrice;
+  const priceChangePercent = firstPrice > 0 ? (priceChange / firstPrice) * 100 : 0;
 
   return (
-    <div className="space-y-4">
-      {/* Time Range Buttons */}
-      <div className="flex space-x-2">
-        {chartTimeRanges.map((range) => (
-          <button
-            key={range.value}
-            onClick={() => onTimeRangeChange(range.value)}
-            className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
-              selectedTimeRange === range.value
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
-            }`}
-          >
-            {range.label}
-          </button>
-        ))}
+    <div className="glass rounded-xl p-6">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-xl font-bold text-gray-100 mb-2">Price Chart</h3>
+          <div className="text-2xl font-bold text-gray-100">
+            {formatCurrency(latestPrice)}
+          </div>
+          <div className={`text-sm ${priceChangePercent >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+            {priceChangePercent >= 0 ? '+' : ''}{priceChangePercent.toFixed(2)}%
+          </div>
+        </div>
+        
+        <div className="flex space-x-2">
+          {timeRanges.map((range) => (
+            <button
+              key={range.value}
+              onClick={() => onTimeRangeChange(range.value)}
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+                timeRange === range.value
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-700/50 text-gray-300 hover:text-white'
+              }`}
+            >
+              {range.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Chart */}
-      <div className="h-64">
-        <Line ref={chartRef} data={chartData} options={options} />
+      <div className="relative h-64 bg-gray-800/30 rounded-lg p-4">
+        <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+          <div className="text-center">
+            <div className="text-lg font-medium mb-2">Chart Coming Soon</div>
+            <div className="text-sm">Interactive price chart will be implemented here</div>
+          </div>
+        </div>
+        
+        {/* Placeholder chart visualization */}
+        <div className="relative h-full">
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-blue-500/20 to-transparent rounded"></div>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+        <div className="glass rounded-lg p-3">
+          <div className="text-gray-400">Market Cap</div>
+          <div className="text-gray-200 font-medium">$1.2T</div>
+        </div>
+        <div className="glass rounded-lg p-3">
+          <div className="text-gray-400">Volume (24h)</div>
+          <div className="text-gray-200 font-medium">$45.2B</div>
+        </div>
       </div>
     </div>
   );

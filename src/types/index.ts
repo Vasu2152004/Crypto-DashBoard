@@ -23,7 +23,7 @@ export interface Coin {
   atl: number | null;
   atl_change_percentage: number | null;
   atl_date: string | null;
-  roi: any | null;
+  roi: Record<string, unknown> | null;
   last_updated: string;
 }
 
