@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Star } from 'lucide-react';
 import { Coin } from '@/types';
-import { formatCurrency, formatPercentage, getPercentageColor, formatNumber } from '@/lib/utils';
+import { formatCurrency, formatPercentage, formatNumber } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 
 interface CoinTableRowProps {

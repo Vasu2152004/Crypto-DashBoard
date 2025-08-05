@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { coinGeckoApi } from '@/lib/api';
 import { Coin } from '@/types';
 import { useWatchlist } from '@/hooks/useWatchlist';
@@ -110,12 +111,12 @@ export default function WatchlistPage() {
           <p className="text-gray-500 dark:text-gray-400 mb-6">
             Start building your watchlist by adding cryptocurrencies from the markets page.
           </p>
-          <a
+          <Link
             href="/"
             className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
           >
             Browse Markets
-          </a>
+          </Link>
         </div>
       ) : watchlistCoins.length === 0 ? (
         <div className="text-center py-12">

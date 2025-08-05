@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { FilterOptions } from '@/types';
+
 
 interface FilterDropdownProps {
   options: { label: string; value: string }[];

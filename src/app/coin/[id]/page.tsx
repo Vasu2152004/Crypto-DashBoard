@@ -131,7 +131,7 @@ export default function CoinDetailPage() {
                   {formatCurrency(coin.current_price)}
                 </div>
                 <div className={cn('flex items-center text-sm', getPercentageColor(coin.price_change_percentage_24h))}>
-                  {coin.price_change_percentage_24h >= 0 ? (
+                  {coin.price_change_percentage_24h && coin.price_change_percentage_24h >= 0 ? (
                     <TrendingUp className="w-4 h-4 mr-1" />
                   ) : (
                     <TrendingDown className="w-4 h-4 mr-1" />
@@ -164,11 +164,8 @@ export default function CoinDetailPage() {
         {chartData && (
           <PriceChart
             data={chartData}
-            coinName={coin.name}
-            currentPrice={coin.current_price}
-            priceChange24h={coin.price_change_percentage_24h}
+            timeRange={selectedTimeRange}
             onTimeRangeChange={handleTimeRangeChange}
-            selectedTimeRange={selectedTimeRange}
           />
         )}
       </div>
