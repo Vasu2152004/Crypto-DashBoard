@@ -111,13 +111,13 @@ export function PriceChart({ data, timeRange, onTimeRangeChange }: PriceChartPro
         grid: {
           display: false,
         },
-        ticks: {
-          color: '#6b7280',
-          font: {
-            size: 12,
-          },
-          maxTicksLimit: 6,
-        },
+                 ticks: {
+           color: '#ffffff',
+           font: {
+             size: 12,
+           },
+           maxTicksLimit: 6,
+         },
         border: {
           display: false,
         },
@@ -129,16 +129,16 @@ export function PriceChart({ data, timeRange, onTimeRangeChange }: PriceChartPro
           color: 'rgba(107, 114, 128, 0.1)',
           drawBorder: false,
         },
-        ticks: {
-          color: '#6b7280',
-          font: {
-            size: 12,
-          },
-          callback: function(this: any, tickValue: string | number) {
-            const value = typeof tickValue === 'number' ? tickValue : parseFloat(tickValue);
-            return formatCurrency(value);
-          },
-        },
+                 ticks: {
+           color: '#ffffff',
+           font: {
+             size: 12,
+           },
+           callback: function(this: any, tickValue: string | number) {
+             const value = typeof tickValue === 'number' ? tickValue : parseFloat(tickValue);
+             return formatCurrency(value);
+           },
+         },
         border: {
           display: false,
         },
